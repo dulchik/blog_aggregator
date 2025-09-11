@@ -17,14 +17,14 @@ func handlerAgg(s *state, cmd command) error {
 		return fmt.Errorf("usage: %v <time_between_reqs>", cmd.Name)
 	}
 
-	timeBetweenRequests, err := time.ParseDuration(cmd.Args[0])
+	timeBetweenRequest, err := time.ParseDuration(cmd.Args[0])
 	if err != nil {
 		return fmt.Errorf("invalid duration: %w", err)
 	}
 
-	log.Printf("Collecting feeds every %s...", timeBetweenRequests)
+	log.Printf("Collecting feeds every %s...", timeBetweenRequest)
 
-	ticker := time.NewTicker(timeBetweenRequests)
+	ticker := time.NewTicker(timeBetweenRequest)
 
 	for ; ; <-ticker.C {
 		scrapeFeeds(s)

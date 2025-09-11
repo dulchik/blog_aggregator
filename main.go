@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"database/sql"
+	"context"
 
 	"github.com/dulchik/blog_aggregator/internal/config"
 	"github.com/dulchik/blog_aggregator/internal/database"
@@ -42,10 +43,11 @@ func main() {
 	c.register("reset", handlerReset)
 	c.register("users", handlerListUsers)
 	c.register("agg", handlerAgg)
-	c.register("addfeed", handlerAddFeed)
+	c.register("addfeed", middlewareLoggedIn(handlerAddFeed))
 	c.register("feeds", handlerListFeeds)
-	c.register("follow", handlerFollow)
-	c.register("following", handlerListFeedFollows)
+	c.register("follow", middlewareLoggedIn(handlerFollow))
+	c.register("following", middlewareLoggedIn(handlerListFeedFollows))
+	c.register("unfollow", middlewareLoggedIn(handlerUnfollow))
 
 	if len(os.Args) < 2 {
 		log.Fatal("Usage: cli <command> [args...]")
@@ -60,3 +62,13 @@ func main() {
 	}
 }
 
+func middlewareLoggedIn(handler func(s *state, cmd command, user database.User) error) func(*state, command) error {
+	return func(s *state, cmd command) error {
+		user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
+		if err != nil {
+			return err
+		}
+		
+		return handler(s, cmd, user)
+	}
+}

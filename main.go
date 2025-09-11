@@ -8,6 +8,7 @@ import (
 
 	"github.com/dulchik/blog_aggregator/internal/config"
 	"github.com/dulchik/blog_aggregator/internal/database"
+
 	_ "github.com/lib/pq"
 )
 
@@ -38,6 +39,7 @@ func main() {
 	c := commands{
 		registeredCommands: make(map[string]func(*state, command) error),
 	}
+
 	c.register("login", handlerLogin)
 	c.register("register", handlerRegister)
 	c.register("reset", handlerReset)
@@ -48,6 +50,7 @@ func main() {
 	c.register("follow", middlewareLoggedIn(handlerFollow))
 	c.register("following", middlewareLoggedIn(handlerListFeedFollows))
 	c.register("unfollow", middlewareLoggedIn(handlerUnfollow))
+	c.register("browse", middlewareLoggedIn(handlerBrowse))
 
 	if len(os.Args) < 2 {
 		log.Fatal("Usage: cli <command> [args...]")

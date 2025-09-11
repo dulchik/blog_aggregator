@@ -75,11 +75,12 @@ func handlerListFeeds(s *state, cmd command) error {
 }
 
 func printFeed(feed database.Feed, user database.User) {
-	fmt.Printf(" * ID: 				%v\n", feed.ID)
-	fmt.Printf(" * CreatedAt: %v\n", feed.CreatedAt)
-	fmt.Printf(" * UpdatedAt: %v\n", feed.UpdatedAt)
-	fmt.Printf(" * Name: 			%v\n", feed.Name)
-	fmt.Printf(" * Url: 			%v\n", feed.Url)
-	fmt.Printf(" * UserID: 		%v\n", feed.UserID)
-	fmt.Printf(" * User: 			%v\n", user.Name)
+	fmt.Printf("* ID: 						%v\n", feed.ID)
+	fmt.Printf("* CreatedAt: 			%v\n", feed.CreatedAt)
+	fmt.Printf("* UpdatedAt: 			%v\n", feed.UpdatedAt)
+	fmt.Printf("* Name: 					%v\n", feed.Name)
+	fmt.Printf("* Url: 						%v\n", feed.Url)
+	fmt.Printf("* UserID: 				%v\n", feed.UserID)
+	fmt.Printf("* User: 			    %v\n", user.Name)
+	fmt.Printf("* LastFetchedAt:  %v\n", feed.LastFetchedAt.Time)
 }
